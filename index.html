@@ -569,10 +569,170 @@ figure img {
                 requerimientos de Diseño.
             </p>
 
-            <svg class="infografia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150">
-                <rect width="100" height="150" fill="lightgray" />
-                <text x="1" y="3" font-size="2">Desarrolla una infografía que presente el proceso Nivel FAU</text>
-            </svg>
+            <!-- ===== INFOGRAFÍA: PROCESO DE INTERCAMBIO FAU ===== -->
+            <div class="infografia">
+                <style>
+                    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+                    .infografia { --azul: #0a1f9e; margin-top: 2rem; padding: 24px 12px; background: #f2efeb; font-family: "Poppins", system-ui, sans-serif; }
+                    .infografia svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+                    .infografia .titulo  { fill: var(--azul); font-weight: 700; font-size: 44px; }
+                    .infografia .intro   { fill: var(--azul); font-size: 14px; }
+                    .infografia .linea   { stroke: var(--azul); stroke-width: 2; }
+                    .infografia .guia    { stroke: var(--azul); stroke-width: 1.5; stroke-dasharray: 6 5; fill: none; }
+                    .infografia .punto   { fill: var(--azul); transition: r 0.25s; }
+                    .infografia .circulo { fill: var(--azul); }
+                    .infografia .icono   { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+                    .infografia .bloque  { fill: var(--azul); opacity: 0; transition: opacity 0.25s; }
+                    .infografia .etq     { fill: var(--azul); font-weight: 700; font-size: 12px; letter-spacing: 0.2em; transition: fill 0.25s; }
+                    .infografia .tit     { fill: var(--azul); font-weight: 600; font-size: 23px; transition: fill 0.25s; }
+                    .infografia .desc    { fill: var(--azul); font-weight: 400; font-size: 14px; transition: fill 0.25s; }
+
+                    /* Cada paso es un grupo: todos siguen visibles, solo cambia el énfasis */
+                    .infografia .paso { cursor: pointer; outline: none; opacity: 1; transform: scale(1); transition: opacity 0.25s, transform 0.25s; }
+                    .infografia svg.hay-activo .paso { opacity: 0.4; }
+                    .infografia svg.hay-activo .paso.activo { opacity: 1; transform: scale(1.04); }
+                    .infografia .paso.activo .bloque,
+                    .infografia .paso:focus-visible .bloque { opacity: 1; }
+                    .infografia .paso.activo .etq,
+                    .infografia .paso.activo .tit,
+                    .infografia .paso.activo .desc,
+                    .infografia .paso:focus-visible .etq,
+                    .infografia .paso:focus-visible .tit,
+                    .infografia .paso:focus-visible .desc { fill: #fff; }
+                </style>
+
+                <svg id="infoFAU" viewBox="0 0 760 1200" role="group" aria-label="Infografía: proceso de intercambio FAU 2027 en 5 pasos">
+                    <text class="titulo" x="40" y="70">Proceso de</text>
+                    <text class="titulo" x="40" y="118">intercambio FAU 2027</text>
+                    <text class="intro" x="40" y="152">Postula para cursar un semestre completo en una universidad extranjera en convenio.</text>
+                    <line id="ejeFAU" class="linea" x1="380" y1="190" x2="380" y2="1500" />
+                    <g id="pasosFAU"></g>
+                </svg>
+
+                <script>
+                    (() => {
+                        /* ===== 1. DATOS: edita aquí los textos ===== */
+                        const PASOS = [
+                            {
+                                t: "Requisitos",
+                                d: "Ser estudiante regular cursando al menos el 3er semestre de tu carrera, con promedio ponderado 4.5, arancel al día y sin matrícula de gracia.",
+                                i: "M9 4h6v3H9z M7 5H5v15h14V5h-2 M9 13l2 2 4-4",
+                            },
+                            {
+                                t: "Documentación",
+                                d: "En el formulario de postulación elige 3 universidades en orden de preferencia y 6 materias tentativas a cursar. Adjunta: carta de motivación académica, certificado de idioma o carta de compromiso, y pasaporte o comprobante de solicitud de cita previa.",
+                                i: "M6 3h8l4 4v14H6z M14 3v4h4 M9 12h6 M9 16h6",
+                            },
+                            {
+                                t: "Selección",
+                                d: "Se evalúa mediante un ranking de notas para distribuir los cupos asignados. Se notifica por email el destino asignado (y la oferta de cupos sobrantes si no hubo asignación inicial).",
+                                i: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M8 12l3 3 5-6",
+                            },
+                            {
+                                t: "Adjudicación",
+                                d: "Al ser asignado el cupo de movilidad, puedes aceptarlo o rechazarlo mediante un documento firmado vía email, en un plazo de siete días desde que lo recibes.",
+                                i: "M12 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10z M8.5 12.5L7 21l5-3 5 3-1.5-8.5",
+                            },
+                            {
+                                t: "Admisión",
+                                d: "La condición oficial de intercambio se alcanza únicamente tras obtener la Carta de Aceptación emitida por la universidad extranjera de destino.",
+                                i: "M5 21V4h9v17 M14 8h5v13 M3 21h18 M11 12v2",
+                            },
+                        ];
+
+                        /* ===== 2. CONSTRUCCIÓN DEL SVG ===== */
+                        const NS = "http://www.w3.org/2000/svg";
+                        const el = (tag, attrs = {}, txt) => {
+                            const n = document.createElementNS(NS, tag);
+                            for (const k in attrs) n.setAttribute(k, attrs[k]);
+                            if (txt !== undefined) n.textContent = txt;
+                            return n;
+                        };
+                        const envolver = (texto, max) => { // salto de línea automático
+                            const out = [];
+                            let l = "";
+                            texto.split(" ").forEach((p) => {
+                                if ((l + " " + p).trim().length > max) {
+                                    out.push(l);
+                                    l = p;
+                                } else l = (l + " " + p).trim();
+                            });
+                            return out.concat(l);
+                        };
+
+                        const svg = document.getElementById("infoFAU");
+                        const cont = document.getElementById("pasosFAU");
+                        const alto = (p) => 130 + 20 * envolver(p.d, 33).length; // alto de cada paso
+                        const POS = [];
+                        PASOS.forEach((p, i) => {
+                            const previo = i ? POS[i - 1] + 170 : 240; // separación mínima entre pasos
+                            const mismoLado = i > 1 ? POS[i - 2] + alto(PASOS[i - 2]) + 30 : 0;
+                            POS.push(Math.max(previo, mismoLado));
+                        });
+                        const fin = POS[POS.length - 1] + alto(PASOS[PASOS.length - 1]) + 20;
+                        svg.setAttribute("viewBox", `0 0 760 ${fin}`);
+                        document.getElementById("ejeFAU").setAttribute("y2", fin - 10);
+
+                        PASOS.forEach((p, i) => {
+                            const izq = i % 2 === 0; // alterna izquierda / derecha
+                            const y = POS[i];
+                            const cx = izq ? 60 : 700;
+                            const tx = izq ? 350 : 410;
+                            const ancla = izq ? "end" : "start";
+                            const g = el("g", {
+                                class: "paso",
+                                tabindex: 0,
+                                role: "button",
+                                "aria-label": `Paso ${i + 1}: ${p.t}. ${p.d}`,
+                            });
+                            g.style.transformOrigin = `${izq ? 365 : 395}px ${y}px`;
+
+                            // guía punteada + punto sobre la línea central
+                            g.append(el("line", { class: "guia", x1: izq ? cx + 30 : 380, x2: izq ? 380 : cx - 30, y1: y, y2: y }));
+                            g.append(el("circle", { class: "punto", cx: 380, cy: y, r: 5 }));
+
+                            // círculo + icono
+                            g.append(el("circle", { class: "circulo", cx, cy: y, r: 30 }));
+                            g.append(el("path", { class: "icono", d: p.i, transform: `translate(${cx - 14.4} ${y - 14.4}) scale(1.2)` }));
+
+                            // texto
+                            const lineasD = envolver(p.d, 33);
+                            const yTit = y + 90,
+                                yDesc = yTit + 34;
+                            const altoBloque = yDesc - y + lineasD.length * 20 + 6;
+                            g.append(el("rect", { class: "bloque", x: izq ? 95 : 395, y: y + 22, width: 270, height: altoBloque, rx: 14 }));
+                            g.append(el("text", { class: "etq", x: tx, y: y + 52, "text-anchor": ancla }, `PASO ${i + 1}`));
+                            g.append(el("text", { class: "tit", x: tx, y: yTit, "text-anchor": ancla }, p.t));
+                            const d = el("text", { class: "desc", x: tx, y: yDesc, "text-anchor": ancla });
+                            lineasD.forEach((ln, k) => d.append(el("tspan", { x: tx, dy: k ? 20 : 0 }, ln)));
+                            g.append(d);
+
+                            // interacción: mouse, toque y teclado
+                            const activar = () => {
+                                svg.classList.add("hay-activo");
+                                cont.querySelectorAll(".paso").forEach((s) => s.classList.toggle("activo", s === g));
+                            };
+                            g.addEventListener("pointerenter", activar);
+                            g.addEventListener("focus", activar);
+                            g.addEventListener("click", activar);
+                            cont.append(g);
+                        });
+
+                        // al salir del gráfico vuelve al estado normal (todo igual de visible)
+                        const limpiar = () => {
+                            svg.classList.remove("hay-activo");
+                            cont.querySelectorAll(".paso").forEach((s) => s.classList.remove("activo"));
+                        };
+                        svg.addEventListener("pointerleave", limpiar);
+                        svg.addEventListener("focusout", (e) => {
+                            if (!svg.contains(e.relatedTarget)) limpiar();
+                        });
+                    })();
+                </script>
+            </div>
+            <!-- ===== FIN INFOGRAFÍA ===== -->
         </div>
 
         <footer>
