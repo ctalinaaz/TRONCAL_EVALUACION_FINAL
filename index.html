@@ -181,16 +181,17 @@
                         }
 
                         figure > div {
-                            flex: 1;
-                        }
+    flex: 1;
+    min-width: 0;
+}
 
-                        figure img {
+figure img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 250px;
     object-fit: cover;
+    background: #ddd;
 }
-                        }
 
                         figcaption {
                             margin-top: 0.4rem;
@@ -433,7 +434,6 @@
                 </div>
                 <div>
                     <img
-                        style="height: 257px"
                         src="https://www.laouc.org/wp-content/uploads/unam.jpg"
                         alt="Foto de la Universidad de destino"
                     />
