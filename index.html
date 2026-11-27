@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Intercambio entre U. Chile y UNAM </title>
+        <title>Intercambio entre U. Chile y UNAM</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,339 +16,398 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
         <style>
-                :root {
-                --color-bg: #eaeaea;
-                --color-accent: slategray;
-                --color-text: rgb(60, 60, 60);
-                --color-text-dark: rgb(30, 30, 30);
-                --color-text-light: rgb(90, 90, 90);
-                --color-border: silver;
-                --color-origen: blue;
-                --color-destino: red;
-                --font-sans: "Bricolage Grotesque", Helvetica, Arial, sans-serif;
-                --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+                            :root {
+                            --color-bg: #eaeaea;
+                            --color-accent: slategray;
+                            --color-text: rgb(60, 60, 60);
+                            --color-text-dark: rgb(30, 30, 30);
+                            --color-text-light: rgb(90, 90, 90);
+                            --color-border: silver;
+                            --color-origen: blue;
+                            --color-destino: red;
+                            --font-sans: "Bricolage Grotesque", Helvetica, Arial, sans-serif;
+                            --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
 
-                --icono-avion: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 100 100"><path fill="slategray" fill-rule="evenodd" d="m55.812 36.117-18.762-6.5898-5.1289 2.9609 12.219 10.488zm-14.398 8.4609-11.883-10.199c-0.32422-0.27734-0.56641-0.61328-0.71875-0.98828-0.15234-0.37109-0.21094-0.77734-0.17188-1.2031s0.17188-0.82031 0.39062-1.1602c0.21484-0.33984 0.51562-0.62109 0.88672-0.83594l5.8008-3.3477v-0.003906c0.32812-0.19141 0.67969-0.30078 1.0547-0.33594 0.36328-0.035156 0.73047 0.011719 1.0859 0.13672l21.332 7.4922 14.984-8.8047 0.003907-0.007813c2.4609-1.4258 4.9297-2.1055 7.4062-2.043 2.4805 0.0625 4.918 0.87109 7.3203 2.418 0.59375 0.38281 0.97656 0.96875 1.1172 1.6094 0.14062 0.63672 0.042968 1.332-0.33203 1.9258-1.2344 1.9727-3.6289 4.2539-7.1758 6.8477-3.4023 2.4883-7.9219 5.3086-13.559 8.4609l-5.0234 26.723c-0.070313 0.37109-0.21484 0.71094-0.42969 1.0117-0.21484 0.30078-0.48438 0.55078-0.8125 0.73828v0.003906l-5.8047 3.3516c-0.36719 0.21094-0.76172 0.32812-1.168 0.34766h-0.007812c-0.40625 0.019531-0.80859-0.058594-1.1914-0.23828v-0.003906c-0.38281-0.17578-0.70703-0.43359-0.95312-0.75-0.25-0.32031-0.42188-0.69922-0.5-1.1133l-3.4805-18.539-15.52 8.9609-0.007812 0.007812-0.035156 0.019532-0.0625 0.035156-0.035157 0.019531-0.023437 0.011719c-3.4375 1.6641-6.4766 2.3477-9.1133 2.0469-2.7734-0.31641-5.0508-1.6836-6.832-4.0977l-7.3672-8.1094c-0.26562-0.29297-0.45703-0.62891-0.56641-0.99219-0.10547-0.35938-0.13281-0.73828-0.070313-1.1328 0.0625-0.39453 0.19922-0.75 0.41406-1.0625 0.21484-0.31641 0.49609-0.57812 0.83984-0.77344h0.007813l4.1797-2.4141v-0.003906c0.36328-0.21094 0.75781-0.32813 1.1641-0.34766 0.40234-0.019531 0.80469 0.054688 1.1836 0.22656l9.6328 4.3594zm-28.262 8.7539 3.5469-2.0469 9.6367 4.3594c0.38281 0.17188 0.78516 0.25 1.1953 0.22656 0.40625-0.023438 0.80078-0.14062 1.168-0.35547l46.98-27.605v0.003906c1.9766-1.1445 3.9219-1.6914 5.8359-1.6445 1.7891 0.046875 3.5938 0.62109 5.4102 1.7227-1.1055 1.5781-3.1641 3.4727-6.1797 5.6758-3.3516 2.4492-7.8242 5.2383-13.414 8.3594-0.33984 0.1875-0.62109 0.4375-0.83984 0.74219-0.21875 0.30469-0.36719 0.65234-0.44141 1.0312l-5.0234 26.723-5.1289 2.9609-3.4805-18.535c-0.078125-0.41406-0.25-0.78906-0.5-1.1133-0.25-0.32031-0.57422-0.57813-0.95312-0.75391h-0.007813c-0.38672-0.17578-0.78906-0.25391-1.1914-0.23438-0.40234 0.019532-0.79688 0.13672-1.1641 0.34766l-15.988 9.2305-0.023437 0.011719c-2.9102 1.4102-5.3984 1.9961-7.4609 1.7578-1.918-0.21875-3.5117-1.1914-4.7773-2.918l-0.023437-0.03125-0.035156-0.042969-0.050781-0.0625-0.035157-0.042969-0.023437-0.027344z"/></svg>');
-                --icono-avion-inclinado: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 100 100"><path fill="slategray" d="m49.676 7.5195c-0.085937 0-0.17188 0.007813-0.25781 0.023438-0.007813 0-0.015625 0.003906-0.019531 0.003906-0.070313 0.015625-0.14063 0.035156-0.20703 0.058594-0.027344 0.007812-0.054687 0.019531-0.078125 0.03125-0.050781 0.019531-0.097656 0.042969-0.14453 0.066406-0.027344 0.015625-0.054688 0.03125-0.082031 0.050781-0.042969 0.027344-0.085938 0.058594-0.125 0.089844-0.027344 0.019531-0.050781 0.039062-0.074219 0.0625-0.03125 0.027344-0.0625 0.058594-0.09375 0.089844-0.027344 0.03125-0.058594 0.066406-0.085938 0.097656-0.023437 0.035156-0.046874 0.070312-0.070312 0.10938-0.019531 0.027344-0.039062 0.058594-0.054688 0.089844-0.023437 0.042969-0.046874 0.089843-0.066406 0.13672-0.011718 0.027343-0.023437 0.054687-0.035156 0.082031-0.015625 0.046875-0.027344 0.097656-0.039062 0.14844-0.007813 0.03125-0.019532 0.066406-0.027344 0.10156-0.011719 0.078125-0.015625 0.15625-0.015625 0.23438v16.078l-28.488 16.957v0.003906c-0.69141 0.41406-0.91797 1.3125-0.50781 2.0078 0.41406 0.69531 1.3086 0.92578 2.0078 0.51953l5.7969-3.4492v12.645h-22.59v-0.003906c-0.39062 0-0.76953 0.15625-1.0469 0.43359s-0.42969 0.65234-0.42969 1.043v35.785c0.003906 0.8125 0.66406 1.4648 1.4766 1.4648h91.176c0.80859-0.003907 1.4609-0.66016 1.4648-1.4648v-35.785c0.003906-0.8125-0.65234-1.4727-1.4648-1.4766h-22.59v-12.57l5.7969 3.3789c0.69922 0.40625 1.5977 0.16797 2.0078-0.53125 0.40625-0.69922 0.17578-1.5977-0.51953-2.0078l-29.148-16.988v-3.1289h15.336c0.39063 0 0.76563-0.15625 1.043-0.43359 0.27344-0.27734 0.42969-0.65234 0.42578-1.043v-11.434c0.003907-0.39062-0.15234-0.76562-0.42578-1.043-0.27734-0.27344-0.65234-0.42969-1.043-0.43359zm1.4648 2.9453h13.863v8.5h-13.863zm-1.4336 17.141 20.355 11.863v50.082h-7.1133v-16.621l0.003906-0.003907c0.003906-0.80859-0.65234-1.4727-1.4648-1.4727h-22.961c-0.39062-0.003906-0.76953 0.15234-1.0469 0.42969-0.27734 0.27734-0.42969 0.65234-0.42969 1.043v16.621h-7.1016v-50.184zm0.29297 11.746c-5.8398 0-10.605 4.7656-10.605 10.605 0 5.8398 4.7656 10.605 10.605 10.605s10.605-4.7617 10.605-10.605c0-5.8398-4.7656-10.605-10.605-10.605zm0 2.9414c4.25 0 7.6641 3.4141 7.6641 7.6641 0 4.2539-3.4141 7.6758-7.6641 7.6758s-7.6641-3.4219-7.6641-7.6758c0-4.2539 3.4141-7.6641 7.6641-7.6641zm-44.117 14.406h21.125v32.852h-21.125zm67.121 0h21.113v32.852h-21.113zm-60.586 3.4297c-0.8125 0.003906-1.4688 0.66406-1.4648 1.4766v8.0547c0.003906 0.80859 0.65625 1.4648 1.4648 1.4648h8.0586c0.80859 0 1.4609-0.65625 1.4648-1.4648v-8.0547c0-0.8125-0.65234-1.4727-1.4648-1.4766zm67.121 0c-0.39062 0-0.76953 0.15234-1.043 0.42969-0.27734 0.27734-0.43359 0.65625-0.43359 1.0469v8.0547c0 0.39062 0.15625 0.76172 0.43359 1.0391 0.27734 0.27344 0.65234 0.42969 1.043 0.42578h8.0586c0.80859 0 1.4609-0.65625 1.4648-1.4648v-8.0547c0-0.8125-0.65234-1.4727-1.4648-1.4766zm-65.652 2.9414h5.1133v5.1133h-5.1133zm67.117 0h5.1172v5.1133h-5.1172zm-41.012 11.324h20.02v15.156h-20.02zm-27.574 0.73047v-0.003906c-0.80859 0.003906-1.4609 0.65625-1.4648 1.4648v8.0547c0.003906 0.80859 0.65625 1.4609 1.4648 1.4648h8.0586c0.80469-0.003907 1.4609-0.65625 1.4648-1.4648v-8.0547c-0.003906-0.80859-0.66016-1.4609-1.4648-1.4648zm67.121 0v-0.003906c-0.8125-0.003906-1.4727 0.65234-1.4766 1.4648v8.0547c0.003906 0.8125 0.66406 1.4688 1.4766 1.4648h8.0586c0.80469-0.003907 1.4609-0.65625 1.4648-1.4648v-8.0547c-0.003906-0.80859-0.66016-1.4609-1.4648-1.4648zm-65.652 2.9297h5.1133v5.1133h-5.1133zm67.117 0h5.1172v5.1133h-5.1172z"/></svg>');
-                --icono-pasaporte: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="slategray" viewBox="0 0 16 16"><path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6M6 8a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-.5 4a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/><path d="M3.232 1.776A1.5 1.5 0 0 0 2 3.252v10.95c0 .445.191.838.49 1.11.367.422.908.688 1.510.688h8a2 2 0 0 0 2-2V4a2 2 0 0 0-1-1.732v-.47A1.5 1.5 0 0 0 11.232.321l-8 1.454ZM4 3h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1"/></svg>');
-                --icono-pulgar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="slategray" viewBox="0 0 16 16"><path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/></svg>');
-            }
+                            --icono-avion: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 100 100"><path fill="slategray" fill-rule="evenodd" d="m55.812 36.117-18.762-6.5898-5.1289 2.9609 12.219 10.488zm-14.398 8.4609-11.883-10.199c-0.32422-0.27734-0.56641-0.61328-0.71875-0.98828-0.15234-0.37109-0.21094-0.77734-0.17188-1.2031s0.17188-0.82031 0.39062-1.1602c0.21484-0.33984 0.51562-0.62109 0.88672-0.83594l5.8008-3.3477v-0.003906c0.32812-0.19141 0.67969-0.30078 1.0547-0.33594 0.36328-0.035156 0.73047 0.011719 1.0859 0.13672l21.332 7.4922 14.984-8.8047 0.003907-0.007813c2.4609-1.4258 4.9297-2.1055 7.4062-2.043 2.4805 0.0625 4.918 0.87109 7.3203 2.418 0.59375 0.38281 0.97656 0.96875 1.1172 1.6094 0.14062 0.63672 0.042968 1.332-0.33203 1.9258-1.2344 1.9727-3.6289 4.2539-7.1758 6.8477-3.4023 2.4883-7.9219 5.3086-13.559 8.4609l-5.0234 26.723c-0.070313 0.37109-0.21484 0.71094-0.42969 1.0117-0.21484 0.30078-0.48438 0.55078-0.8125 0.73828v0.003906l-5.8047 3.3516c-0.36719 0.21094-0.76172 0.32812-1.168 0.34766h-0.007812c-0.40625 0.019531-0.80859-0.058594-1.1914-0.23828v-0.003906c-0.38281-0.17578-0.70703-0.43359-0.95312-0.75-0.25-0.32031-0.42188-0.69922-0.5-1.1133l-3.4805-18.539-15.52 8.9609-0.007812 0.007812-0.035156 0.019532-0.0625 0.035156-0.035157 0.019531-0.023437 0.011719c-3.4375 1.6641-6.4766 2.3477-9.1133 2.0469-2.7734-0.31641-5.0508-1.6836-6.832-4.0977l-7.3672-8.1094c-0.26562-0.29297-0.45703-0.62891-0.56641-0.99219-0.10547-0.35938-0.13281-0.73828-0.070313-1.1328 0.0625-0.39453 0.19922-0.75 0.41406-1.0625 0.21484-0.31641 0.49609-0.57812 0.83984-0.77344h0.007813l4.1797-2.4141v-0.003906c0.36328-0.21094 0.75781-0.32813 1.1641-0.34766 0.40234-0.019531 0.80469 0.054688 1.1836 0.22656l9.6328 4.3594zm-28.262 8.7539 3.5469-2.0469 9.6367 4.3594c0.38281 0.17188 0.78516 0.25 1.1953 0.22656 0.40625-0.023438 0.80078-0.14062 1.168-0.35547l46.98-27.605v0.003906c1.9766-1.1445 3.9219-1.6914 5.8359-1.6445 1.7891 0.046875 3.5938 0.62109 5.4102 1.7227-1.1055 1.5781-3.1641 3.4727-6.1797 5.6758-3.3516 2.4492-7.8242 5.2383-13.414 8.3594-0.33984 0.1875-0.62109 0.4375-0.83984 0.74219-0.21875 0.30469-0.36719 0.65234-0.44141 1.0312l-5.0234 26.723-5.1289 2.9609-3.4805-18.535c-0.078125-0.41406-0.25-0.78906-0.5-1.1133-0.25-0.32031-0.57422-0.57813-0.95312-0.75391h-0.007813c-0.38672-0.17578-0.78906-0.25391-1.1914-0.23438-0.40234 0.019532-0.79688 0.13672-1.1641 0.34766l-15.988 9.2305-0.023437 0.011719c-2.9102 1.4102-5.3984 1.9961-7.4609 1.7578-1.918-0.21875-3.5117-1.1914-4.7773-2.918l-0.023437-0.03125-0.035156-0.042969-0.050781-0.0625-0.035157-0.042969-0.023437-0.027344z"/></svg>');
+                            --icono-avion-inclinado: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 100 100"><path fill="slategray" d="m49.676 7.5195c-0.085937 0-0.17188 0.007813-0.25781 0.023438-0.007813 0-0.015625 0.003906-0.019531 0.003906-0.070313 0.015625-0.14063 0.035156-0.20703 0.058594-0.027344 0.007812-0.054687 0.019531-0.078125 0.03125-0.050781 0.019531-0.097656 0.042969-0.14453 0.066406-0.027344 0.015625-0.054688 0.03125-0.082031 0.050781-0.042969 0.027344-0.085938 0.058594-0.125 0.089844-0.027344 0.019531-0.050781 0.039062-0.074219 0.0625-0.03125 0.027344-0.0625 0.058594-0.09375 0.089844-0.027344 0.03125-0.058594 0.066406-0.085938 0.097656-0.023437 0.035156-0.046874 0.070312-0.070312 0.10938-0.019531 0.027344-0.039062 0.058594-0.054688 0.089844-0.023437 0.042969-0.046874 0.089843-0.066406 0.13672-0.011718 0.027343-0.023437 0.054687-0.035156 0.082031-0.015625 0.046875-0.027344 0.097656-0.039062 0.14844-0.007813 0.03125-0.019532 0.066406-0.027344 0.10156-0.011719 0.078125-0.015625 0.15625-0.015625 0.23438v16.078l-28.488 16.957v0.003906c-0.69141 0.41406-0.91797 1.3125-0.50781 2.0078 0.41406 0.69531 1.3086 0.92578 2.0078 0.51953l5.7969-3.4492v12.645h-22.59v-0.003906c-0.39062 0-0.76953 0.15625-1.0469 0.43359s-0.42969 0.65234-0.42969 1.043v35.785c0.003906 0.8125 0.66406 1.4648 1.4766 1.4648h91.176c0.80859-0.003907 1.4609-0.66016 1.4648-1.4648v-35.785c0.003906-0.8125-0.65234-1.4727-1.4648-1.4766h-22.59v-12.57l5.7969 3.3789c0.69922 0.40625 1.5977 0.16797 2.0078-0.53125 0.40625-0.69922 0.17578-1.5977-0.51953-2.0078l-29.148-16.988v-3.1289h15.336c0.39063 0 0.76563-0.15625 1.043-0.43359 0.27344-0.27734 0.42969-0.65234 0.42578-1.043v-11.434c0.003907-0.39062-0.15234-0.76562-0.42578-1.043-0.27734-0.27344-0.65234-0.42969-1.043-0.43359zm1.4648 2.9453h13.863v8.5h-13.863zm-1.4336 17.141 20.355 11.863v50.082h-7.1133v-16.621l0.003906-0.003907c0.003906-0.80859-0.65234-1.4727-1.4648-1.4727h-22.961c-0.39062-0.003906-0.76953 0.15234-1.0469 0.42969-0.27734 0.27734-0.42969 0.65234-0.42969 1.043v16.621h-7.1016v-50.184zm0.29297 11.746c-5.8398 0-10.605 4.7656-10.605 10.605 0 5.8398 4.7656 10.605 10.605 10.605s10.605-4.7617 10.605-10.605c0-5.8398-4.7656-10.605-10.605-10.605zm0 2.9414c4.25 0 7.6641 3.4141 7.6641 7.6641 0 4.2539-3.4141 7.6758-7.6641 7.6758s-7.6641-3.4219-7.6641-7.6758c0-4.2539 3.4141-7.6641 7.6641-7.6641zm-44.117 14.406h21.125v32.852h-21.125zm67.121 0h21.113v32.852h-21.113zm-60.586 3.4297c-0.8125 0.003906-1.4688 0.66406-1.4648 1.4766v8.0547c0.003906 0.80859 0.65625 1.4648 1.4648 1.4648h8.0586c0.80859 0 1.4609-0.65625 1.4648-1.4648v-8.0547c0-0.8125-0.65234-1.4727-1.4648-1.4766zm67.121 0c-0.39062 0-0.76953 0.15234-1.043 0.42969-0.27734 0.27734-0.43359 0.65625-0.43359 1.0469v8.0547c0 0.39062 0.15625 0.76172 0.43359 1.0391 0.27734 0.27344 0.65234 0.42969 1.043 0.42578h8.0586c0.80859 0 1.4609-0.65625 1.4648-1.4648v-8.0547c0-0.8125-0.65234-1.4727-1.4648-1.4766zm-65.652 2.9414h5.1133v5.1133h-5.1133zm67.117 0h5.1172v5.1133h-5.1172zm-41.012 11.324h20.02v15.156h-20.02zm-27.574 0.73047v-0.003906c-0.80859 0.003906-1.4609 0.65625-1.4648 1.4648v8.0547c0.003906 0.80859 0.65625 1.4609 1.4648 1.4648h8.0586c0.80469-0.003907 1.4609-0.65625 1.4648-1.4648v-8.0547c-0.003906-0.80859-0.66016-1.4609-1.4648-1.4648zm67.121 0v-0.003906c-0.8125-0.003906-1.4727 0.65234-1.4766 1.4648v8.0547c0.003906 0.8125 0.66406 1.4688 1.4766 1.4648h8.0586c0.80469-0.003907 1.4609-0.65625 1.4648-1.4648v-8.0547c-0.003906-0.80859-0.66016-1.4609-1.4648-1.4648zm-65.652 2.9297h5.1133v5.1133h-5.1133zm67.117 0h5.1172v5.1133h-5.1172z"/></svg>');
+                            --icono-pasaporte: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="slategray" viewBox="0 0 16 16"><path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6M6 8a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-.5 4a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/><path d="M3.232 1.776A1.5 1.5 0 0 0 2 3.252v10.95c0 .445.191.838.49 1.11.367.422.908.688 1.510.688h8a2 2 0 0 0 2-2V4a2 2 0 0 0-1-1.732v-.47A1.5 1.5 0 0 0 11.232.321l-8 1.454ZM4 3h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1"/></svg>');
+                            --icono-pulgar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="slategray" viewBox="0 0 16 16"><path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/></svg>');
+                        }
 
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
+                        *,
+                        *::before,
+                        *::after {
+                            box-sizing: border-box;
+                            margin: 0;
+                            padding: 0;
+                        }
 
-            body {
-                font-family: var(--font-serif);
-                font-size: 1.1rem;
-                line-height: 1.6;
-                color: var(--color-text);
-                background: linear-gradient(to bottom, var(--color-bg), white);
-            }
+                        body {
+                            font-family: var(--font-serif);
+                            font-size: 1.1rem;
+                            line-height: 1.6;
+                            color: var(--color-text);
+                            background: linear-gradient(to bottom, var(--color-bg), white);
+                        }
 
-            a {
-                color: var(--color-text-dark);
-                text-decoration: underline dotted;
-                text-underline-offset: 3px;
-            }
+                        a {
+                            color: var(--color-text-dark);
+                            text-decoration: underline dotted;
+                            text-underline-offset: 3px;
+                        }
 
-            a:hover {
-                text-decoration-style: solid;
-            }
+                        a:hover {
+                            text-decoration-style: solid;
+                        }
 
-            p {
-                margin-bottom: 1rem;
-                text-align: justify;
-                text-align-last: left;
-                letter-spacing: 0.01em;
-                hyphens: auto;
-                text-wrap: pretty;
-            }
+                        p {
+                            margin-bottom: 1rem;
+                            text-align: justify;
+                            text-align-last: left;
+                            letter-spacing: 0.01em;
+                            hyphens: auto;
+                            text-wrap: pretty;
+                        }
 
-            em {
-                font-weight: 500;
-            }
+                        em {
+                            font-weight: 500;
+                        }
 
-            abbr {
-                font-size: 0.85em;
-                text-decoration: none;
-                cursor: help;
-            }
+                        abbr {
+                            font-size: 0.85em;
+                            text-decoration: none;
+                            cursor: help;
+                        }
 
-            mark {
-                background: yellow;
-                color: inherit;
-            }
+                        mark {
+                            background: yellow;
+                            color: inherit;
+                        }
 
-            ul,
-            ol {
-                margin-bottom: 1rem;
-                list-style-position: inside;
-            }
+                        ul,
+                        ol {
+                            margin-bottom: 1rem;
+                            list-style-position: inside;
+                        }
 
-            li {
-                margin-bottom: 0.25rem;
-            }
+                        li {
+                            margin-bottom: 0.25rem;
+                        }
 
-            h1,
-            h2,
-            h3,
-            h4,
-            h5 {
-                font-family: var(--font-sans);
-                font-weight: 500;
-                line-height: 1.2;
-            }
+                        h1,
+                        h2,
+                        h3,
+                        h4,
+                        h5 {
+                            font-family: var(--font-sans);
+                            font-weight: 500;
+                            line-height: 1.2;
+                        }
 
-            h3 + p {
-                margin-top: 1rem;
-            }
+                        h3 + p {
+                            margin-top: 1rem;
+                        }
 
-            hr {
-                margin: 2rem 0;
-                border: 2px solid #ccc;
-            }
+                        hr {
+                            margin: 2rem 0;
+                            border: 2px solid #ccc;
+                        }
 
-            .container {
-                width: 90%;
-                max-width: 700px;
-                margin: 0 auto;
-            }
+                        .container {
+                            width: 90%;
+                            max-width: 700px;
+                            margin: 0 auto;
+                        }
 
-            /* Portada */
-            header {
-                margin: 3rem 0 7rem;
-                text-align: center;
-            }
+                        /* Portada */
+                        header {
+                            margin: 3rem 0 7rem;
+                            text-align: center;
+                        }
 
-            header h1::before {
-                content: "";
-                display: block;
-                width: calc(1.5rem + 5vw);
-                height: calc(1.5rem + 5vw);
-                margin: 0 auto;
-                background: var(--icono-avion) no-repeat center / contain;
-            }
+                        header h1::before {
+                            content: "";
+                            display: block;
+                            width: calc(1.5rem + 5vw);
+                            height: calc(1.5rem + 5vw);
+                            margin: 0 auto;
+                            background: var(--icono-avion) no-repeat center / contain;
+                        }
 
-            header h1,
-            header h2,
-            header h3 {
-                color: var(--color-accent);
-            }
+                        header h1,
+                        header h2,
+                        header h3 {
+                            color: var(--color-accent);
+                        }
 
-            header h1 {
-                font-size: calc(1.1rem + 1.8vw);
-                font-weight: 600;
-                letter-spacing: 0.1rem;
-                line-height: 1.1;
-                text-transform: uppercase;
-            }
+                        header h1 {
+                            font-size: calc(1.1rem + 1.8vw);
+                            font-weight: 600;
+                            letter-spacing: 0.1rem;
+                            line-height: 1.1;
+                            text-transform: uppercase;
+                        }
 
-            header h2 {
-                font-size: calc(1.1rem + 1.75vw);
-            }
+                        header h2 {
+                            font-size: calc(1.1rem + 1.75vw);
+                        }
 
-            header h3 {
-                font-size: calc(1.1rem + 1.15vw);
-            }
+                        header h3 {
+                            font-size: calc(1.1rem + 1.15vw);
+                        }
 
-            header h4 {
-                margin-top: 1rem;
-                font-size: 1rem;
-            }
+                        header h4 {
+                            margin-top: 1rem;
+                            font-size: 1rem;
+                        }
 
-            header h5 {
-                margin: 1rem 0 2rem;
-                font-size: 0.8rem;
-                letter-spacing: 0.05rem;
-            }
+                        header h5 {
+                            margin: 1rem 0 2rem;
+                            font-size: 0.8rem;
+                            letter-spacing: 0.05rem;
+                        }
 
-            header + p {
-                font-size: 120%;
-                font-weight: 300;
-            }
+                        header + p {
+                            font-size: 120%;
+                            font-weight: 300;
+                        }
 
-            /* Figuras */
-            figure {
-                display: flex;
-                gap: 0.5rem;
+                        /* Figuras */
+                        figure {
+                            display: flex;
+                            gap: 0.5rem;
+                            width: calc(100% + 4vw);
+                            margin: 0.5rem -2vw 2rem;
+                        }
+
+                        figure > div {
+                            flex: 1;
+                        }
+
+                        figure img {
+                            display: block;
+                            width: 100%;
+                            height: auto;
+                        }
+
+                        figcaption {
+                            margin-top: 0.4rem;
+                            font-size: 0.8rem;
+                            color: #666;
+                            text-indent: 2vw;
+                        }
+
+                        @media (orientation: portrait) {
+                            figure {
+                                flex-direction: column;
+                            }
+                        }
+
+
+                        h3{margin-top:3rem;}
+
+                        /* Gráficos, rankings y mapa */
+                        .ranking,
+                        #map {
+                            width: calc(100% + 4vw);
+                            margin: 0.5rem -2vw 1.5rem;
+                        }
+
+                        .ranking {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(1.4rem, 1fr));
+                            gap: 0.2rem;
+                            font: 0.5rem/1.25 monospace;
+                        }
+
+                        .ranking span {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--color-border);
+                            border: 1px solid var(--color-border);
+                        }
+
+                        .ranking .entre {
+                            color: black;
+                            border-color: black;
+                        }
+
+                        .ranking .destino {
+                            color: var(--color-destino);
+                            border-color: var(--color-destino);
+                            background: rgba(255, 0, 0, 0.1);
+                            font-weight: bold;
+                        }
+
+                        .ranking .origen {
+                            color: var(--color-origen);
+                            border-color: var(--color-origen);
+                            background: rgba(0, 0, 255, 0.1);
+                            font-weight: bold;
+                        }
+
+                        .grafico {
+                            max-width: 500px;
+                            margin: 2.5rem auto;
+                        }
+                        .radar {
                 width: calc(100% + 4vw);
                 margin: 0.5rem -2vw 2rem;
             }
-
-            figure > div {
-                flex: 1;
-            }
-
-            figure img {
+            .radar svg {
                 display: block;
                 width: 100%;
                 height: auto;
+                font: 12px var(--font-sans);
+                overflow: visible;
             }
-
-            figcaption {
-                margin-top: 0.4rem;
-                font-size: 0.8rem;
-                color: #666;
-                text-indent: 2vw;
+            .radar svg text { fill: var(--color-text); }
+            .radar .grilla { fill: none; stroke: var(--color-border); }
+            .radar .eje { stroke: var(--color-border); }
+            .radar .escala { font-size: 9px; fill: var(--color-text-light); text-anchor: middle; }
+            .radar .info text { fill: white; }
+            .radar .serie polygon { stroke-width: 2; transition: opacity 0.2s; }
+            .radar .serie.oculta { display: none; }
+            .radar.hay-activa .serie:not(.activa) { opacity: 0.2; }
+            .radar .zona { fill: transparent; stroke: none; cursor: pointer; }
+            .radar .zona:focus { outline: none; stroke: black; stroke-width: 1.5; }
+            .radar .leyenda {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin-bottom: 0.5rem;
             }
-
-            @media (orientation: portrait) {
-                figure {
-                    flex-direction: column;
-                }
-            }
-
-
-            h3{margin-top:3rem;}
-
-            /* Gráficos, rankings y mapa */
-            .ranking,
-            #map {
-                width: calc(100% + 4vw);
-                margin: 0.5rem -2vw 1.5rem;
-            }
-
-            .ranking {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(1.4rem, 1fr));
-                gap: 0.2rem;
-                font: 0.5rem/1.25 monospace;
-            }
-
-            .ranking span {
+            .radar .leyenda button {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                color: var(--color-border);
-                border: 1px solid var(--color-border);
+                gap: 0.5rem;
+                padding: 0;
+                font: 14px Helvetica, Arial, sans-serif;
+                color: #666;
+                background: none;
+                border: 0;
+                cursor: pointer;
             }
-
-            .ranking .entre {
-                color: black;
-                border-color: black;
+            .radar .leyenda button[aria-pressed="false"] {
+                text-decoration: line-through;
             }
-
-            .ranking .destino {
-                color: var(--color-destino);
-                border-color: var(--color-destino);
-                background: rgba(255, 0, 0, 0.1);
-                font-weight: bold;
+            .radar .muestra {
+                width: 40px;
+                height: 14px;
+                background: var(--relleno);
+                border: 3px solid var(--color);
+                border-radius: 0;
             }
-
-            .ranking .origen {
-                color: var(--color-origen);
-                border-color: var(--color-origen);
-                background: rgba(0, 0, 255, 0.1);
-                font-weight: bold;
             }
-
-            .grafico {
-                max-width: 500px;
-                margin: 2.5rem auto;
-            }
-
-            #map {
-                height: 400px;
-            }
-
-            .leaflet-attribution-flag {
-                display: none !important;
-            }
-
-            /* Secciones */
-            h2.destino,
-            h2.pasaporte {
-                margin-bottom: 2rem;
-                text-align: center;
-            }
-
-            h2.destino::before,
-            h2.pasaporte::before {
-                content: "";
+            .radar .nota {
                 display: block;
-                margin: 5rem auto 1rem;
-                background: no-repeat center / contain;
+                margin-top: 0.5rem;
+                font-size: 0.75rem;
+                color: #666;
             }
+                        #map {
+                            height: 400px;
+                        }
 
-            h2.destino::before {
-                width: calc(1rem + 5vw);
-                height: calc(1rem + 5vw);
-                background-image: var(--icono-avion-inclinado);
-            }
+                        .leaflet-attribution-flag {
+                            display: none !important;
+                        }
 
-            h2.pasaporte::before {
-                width: calc(1rem + 2.5vw);
-                height: calc(1rem + 2.5vw);
-                margin-top: 3rem;
-                background-image: var(--icono-pasaporte);
-            }
+                        /* Secciones */
+                        h2.destino,
+                        h2.pasaporte {
+                            margin-bottom: 2rem;
+                            text-align: center;
+                        }
 
-            .infografia {
-                display: block;
-                width: 100%;
-            }
+                        h2.destino::before,
+                        h2.pasaporte::before {
+                            content: "";
+                            display: block;
+                            margin: 5rem auto 1rem;
+                            background: no-repeat center / contain;
+                        }
 
-            /* Pie */
-            footer {
-                margin-top: 10vh;
-                padding: 4rem 0;
-                background: white;
-            }
+                        h2.destino::before {
+                            width: calc(1rem + 5vw);
+                            height: calc(1rem + 5vw);
+                            background-image: var(--icono-avion-inclinado);
+                        }
 
-            dl {
-                font-family: var(--font-sans);
-                font-size: 80%;
-                letter-spacing: 0.025rem;
-            }
+                        h2.pasaporte::before {
+                            width: calc(1rem + 2.5vw);
+                            height: calc(1rem + 2.5vw);
+                            margin-top: 3rem;
+                            background-image: var(--icono-pasaporte);
+                        }
 
-            dt {
-                padding-left: 1.2rem;
-                font-weight: 700;
-                background: var(--icono-pulgar) no-repeat 0 0.2rem / 0.9rem;
-            }
+                        .infografia {
+                            display: block;
+                            width: 100%;
+                        }
 
-            dd {
-                margin-top: 0.25rem;
-                font-size: 90%;
-                color: var(--color-text-light);
-            }
+                        /* Pie */
+                        footer {
+                            margin-top: 10vh;
+                            padding: 4rem 0;
+                            background: white;
+                        }
 
-            dd em {
-                font-style: normal;
-                font-weight: 700;
-            }
-            .entre {
-                color: #ff0000;
-            }
+                        dl {
+                            font-family: var(--font-sans);
+                            font-size: 80%;
+                            letter-spacing: 0.025rem;
+                        }
+
+                        dt {
+                            padding-left: 1.2rem;
+                            font-weight: 700;
+                            background: var(--icono-pulgar) no-repeat 0 0.2rem / 0.9rem;
+                        }
+
+                        dd {
+                            margin-top: 0.25rem;
+                            font-size: 90%;
+                            color: var(--color-text-light);
+                        }
+
+                        dd em {
+                            font-style: normal;
+                            font-weight: 700;
+                        }
+                        .entre {
+                            color: #ff0000;
+                        }
         </style>
     </head>
     <body>
         <div class="container">
             <header>
                 <h1>Intercambio</h1>
-                <h2>un viaje no tan largo desde la FAU a la UNAM</h2>    
-                <h4>Por <a href="https://github.com/ctalinaaz" target="_blank" rel="noopener">Catalina Aceituno</a> y <a href="https://github.com/amalia-pont" target="_blank" rel="noopener">Amalia Pontigo</a></h4>
+                <h2>Un viaje no tan largo desde la FAU a la UNAM</h2>
+                <h4>
+                    Por <a href="https://github.com/ctalinaaz" target="_blank" rel="noopener">Catalina Aceituno</a> y
+                    <a href="https://github.com/amalia-pont" target="_blank" rel="noopener">Amalia Pontigo</a>
+                </h4>
                 <h5>27 de noviembre, 2026</h5>
             </header>
 
             <p>
                 Las y los estudiantes de Diseño de la Universidad de Chile contamos con opciones de intercambio a
-                instituciones tan relevantes como el <a href="#" target="_blank" rel="noopener">Politécnico de Milán</a>, la
-                <a href="#" target="_blank" rel="noopener"><abbr title="Universidad de Buenos Aires">UBA</abbr></a>, la
-                <a href="#" target="_blank" rel="noopener">Universidad de São Paulo</a>, la
-                <a href="#" target="_blank" rel="noopener"><abbr title="Universidad Nacional Autónoma de México">UNAM</abbr></a> y el
-                <a href="#" target="_blank" rel="noopener">Tecnológico de Monterrey</a>.
+                instituciones tan relevantes como el
+                <a href="#" target="_blank" rel="noopener">Politécnico de Milán</a>, la
+                <a href="#" target="_blank" rel="noopener"><abbr title="Universidad de Buenos Aires">UBA</abbr></a
+                >, la <a href="#" target="_blank" rel="noopener">Universidad de São Paulo</a>, la
+                <a href="#" target="_blank" rel="noopener"
+                    ><abbr title="Universidad Nacional Autónoma de México">UNAM</abbr></a
+                >
+                y el <a href="#" target="_blank" rel="noopener">Tecnológico de Monterrey</a>.
             </p>
             <p>
                 Tales instituciones y la nuestra <em>demuestran</em> su relevancia <em>apareciendo</em> en las métricas
-                del
-                <a href="#" target="_blank" rel="noopener">Ranking <abbr title="Quacquarelli Symonds">QS</abbr></a>, un
-                sistema londinense que opera en dos vertientes:
+                del <a href="#" target="_blank" rel="noopener">Ranking <abbr title="Quacquarelli Symonds">QS</abbr></a
+                >, un sistema londinense que opera en dos vertientes:
                 <em><abbr title="Quacquarelli Symonds">QS</abbr> World University Rankings</em>, centrada en el
                 desempeño institucional general, y
                 <em><abbr title="Quacquarelli Symonds">QS</abbr> World University Rankings by Subject</em>, que en
@@ -359,29 +418,37 @@
             </p>
             <p>
                 A continuación se <em>muestra</em> lo que deberías saber si tu intención es irte de intercambio a la
-                <mark style="background-color: transparent;">Universidad Nacional Autónoma de México (UNAM)</mark>.
+                <mark style="background-color: transparent">Universidad Nacional Autónoma de México (UNAM)</mark>.
             </p>
 
             <figure>
                 <div>
-                <img src="https://portaluchile.uchile.cl//.imaging/stk/uchile/ancho1000/dam/imagenes/FAU/imagenes-noticias/111753_1_portugal84-fau_S/jcr:content/portugal84-fau.jpg.jpg" alt="Fachada de la Facultad de Arquitectura y Urbanismo, Universidad de Chile"/>
-                <figcaption>Facultad de Arquitectura y Urbanismo, U. Chile.</figcaption>
+                    <img
+                        src="https://portaluchile.uchile.cl//.imaging/stk/uchile/ancho1000/dam/imagenes/FAU/imagenes-noticias/111753_1_portugal84-fau_S/jcr:content/portugal84-fau.jpg.jpg"
+                        alt="Fachada de la Facultad de Arquitectura y Urbanismo, Universidad de Chile"
+                    />
+                    <figcaption>Facultad de Arquitectura y Urbanismo, U. Chile.</figcaption>
                 </div>
                 <div>
-                    <img style="height: 257px;" src="https://www.laouc.org/wp-content/uploads/unam.jpg" alt="Foto de la Universidad de destino" />
+                    <img
+                        style="height: 257px"
+                        src="https://www.laouc.org/wp-content/uploads/unam.jpg"
+                        alt="Foto de la Universidad de destino"
+                    />
                     <figcaption>Facultad de Artes y Diseño, UNAM.</figcaption>
                 </div>
             </figure>
 
             <h3>Diferencia entre universidades de origen y destino</h3>
             <p>
-                En su versión publicada el 18 de junio de 2026, son <span data-dato="universidades.total"></span>
-                las instituciones que <em>cuentan</em> en el Ranking <abbr title="Quacquarelli Symonds">QS</abbr> para
+                En su versión publicada el 18 de junio de 2026, son <span data-dato="universidades.total"></span> las
+                instituciones que <em>cuentan</em> en el Ranking <abbr title="Quacquarelli Symonds">QS</abbr> para
                 Universidades.
             </p>
             <p>
-                Según tal ranking, un intercambio desde la Universidad de Chile a <mark style="background-color: transparent;">Universidad Nacional Autónoma de México</mark>
-                implica moverse entre los lugares <span data-dato="universidades.origen"></span> y
+                Según tal ranking, un intercambio desde la Universidad de Chile a
+                <mark style="background-color: transparent">Universidad Nacional Autónoma de México</mark> implica
+                moverse entre los lugares <span data-dato="universidades.origen"></span> y
                 <span data-dato="universidades.destino"></span> del mundo.
             </p>
 
@@ -396,42 +463,85 @@
                 En su versión publicada el 25 de marzo de 2026, son <span data-dato="escuelas.total"></span> las
                 instituciones consideradas en el Ranking <abbr title="Quacquarelli Symonds">QS</abbr> para el área de
                 Arte y Diseño. Según este ranking, un intercambio desde Diseño de la Universidad de Chile a
-                <mark style="background-color: transparent;">Universidad Nacional Autónoma de México</mark> implica moverse entre los lugares
-                <span data-dato="escuelas.origen"></span> y <span data-dato="escuelas.destino"></span> del mundo.
+                <mark style="background-color: transparent">Universidad Nacional Autónoma de México</mark> implica
+                moverse entre los lugares <span data-dato="escuelas.origen"></span> y
+                <span data-dato="escuelas.destino"></span> del mundo.
             </p>
 
-            <div style="height: 250px;" id="escuelas" class="ranking"></div>
+            <div style="height: 250px" id="escuelas" class="ranking"></div>
             <p>La diferencia de posiciones se explica cuando se consideran las siguientes dimensiones:</p>
 
-            <div class="grafico"><canvas style="min-width: 46px; height: 700px;" id="comparaEscuelas"></canvas></div>
-            <p><mark style="background-color: transparent;">[COMPLETAR: Comentario que ayude a leer el gráfico]</mark></p>
+            <div class="radar" id="radarEscuelas">
+                <div class="leyenda"></div>
+                <svg viewBox="0 0 720 420" role="img" aria-labelledby="radar-titulo radar-desc">
+                    <title id="radar-titulo">Nivel escuela de Diseño: QS Arte y Diseño 2026</title>
+                    <desc id="radar-desc">
+                        Radar de tres ejes con puntajes de 0 a 100. UNAM: 63,9 en reputación académica, 81,6 en
+                        reputación entre empleadores y 65,7 de puntaje general. Universidad de Chile: 52,5, 78,5 y 55,1.
+                    </desc>
+                    <g class="area" transform="translate(360,270)"></g>
+                    <g class="info" visibility="hidden" pointer-events="none">
+                        <rect fill="rgba(0,0,0,0.8)" rx="6" />
+                        <text></text>
+                    </g>
+                </svg>
+            </div>
+            <p>
+                <mark style="background-color: transparent">[COMPLETAR: Comentario que ayude a leer el gráfico]</mark>
+            </p>
 
-            <h2 class="destino">La facultad de Artes y Diseño en la <mark style="background-color: transparent;">UNAM</mark></h2>
+            <h2 class="destino">
+                La facultad de Artes y Diseño en la <mark style="background-color: transparent">UNAM</mark>
+            </h2>
 
-            <p style="font-size: 17px;">La Facultad de Artes y Diseño de la Universidad Nacional Autónoma de México es el principal exponente de México y América Latina para la formación de profesionales, creadores e investigadores en los ámbitos de las artes visuales y el diseño. Integra la tradición técnica con las tecnologías contemporáneas para responder a los retos culturales, sociales y comunicativos de la actualidad. Su modelo educativo fomenta el pensamiento crítico, la experimentación interdisciplinaria y la producción creativa, impulsando tanto el desarrollo artístico individual como el compromiso social de sus egresados.
-&nbsp;</p>
+            <p style="font-size: 17px">
+                La Facultad de Artes y Diseño de la Universidad Nacional Autónoma de México es el principal exponente de
+                México y América Latina para la formación de profesionales, creadores e investigadores en los ámbitos de
+                las artes visuales y el diseño. Integra la tradición técnica con las tecnologías contemporáneas para
+                responder a los retos culturales, sociales y comunicativos de la actualidad. Su modelo educativo fomenta
+                el pensamiento crítico, la experimentación interdisciplinaria y la producción creativa, impulsando tanto
+                el desarrollo artístico individual como el compromiso social de sus egresados. &nbsp;
+            </p>
 
             <div id="map"></div>
 
             <figure>
                 <div>
-                    <img style="width: 289px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNkrDCSdapq_XFpW6pMNDr0AjdjKcYUjnWrijHDZsQ8OFOB207" alt="Imagen representativa del lugar de destino 1" />
+                    <img
+                        style="width: 289px"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNkrDCSdapq_XFpW6pMNDr0AjdjKcYUjnWrijHDZsQ8OFOB207"
+                        alt="Imagen representativa del lugar de destino 1"
+                    />
                     <figcaption>Pie destino 1</figcaption>
                 </div>
                 <div>
-                    <img src="https://www.gaceta.unam.mx/wp-content/uploads/2019/02/190228-GAL-ILUS04.jpg" alt="Imagen representativa del lugar de destino 2" />
+                    <img
+                        src="https://www.gaceta.unam.mx/wp-content/uploads/2019/02/190228-GAL-ILUS04.jpg"
+                        alt="Imagen representativa del lugar de destino 2"
+                    />
                     <figcaption>Pie destino 2</figcaption>
                 </div>
             </figure>
 
             <p>
-            La FAD articula un ecosistema de infraestructura distribuida que conecta la tradición histórica con la docencia contemporánea. Sus operaciones de pregrado se concentran en la Sede Xochimilco mientras que la histórica Academia de San Carlos, situada en el Centro Histórico de la CDMX, resguarda colecciones especializadas, laboratorios de medios digitales y desarrollo de actividades culturales. 
-            <p>Esta facultad en especial ofrece: </p>
+                La FAD articula un ecosistema de infraestructura distribuida que conecta la tradición histórica con la
+                docencia contemporánea. Sus operaciones de pregrado se concentran en la Sede Xochimilco mientras que la
+                histórica Academia de San Carlos, situada en el Centro Histórico de la CDMX, resguarda colecciones
+                especializadas, laboratorios de medios digitales y desarrollo de actividades culturales.
+            </p>
+
+            <p>Esta facultad en especial ofrece:</p>
 
             <ul>
                 <li>En el mismo campus las licenciaturas de Diseño y Comunicación Visual y Artes Visuales.</li>
-                <li>El taller Carlos Olachea es un espacio referente en artes impresas y grabado dentro de la facultad, donde se organizan encuentros internacionales y proyectos de edición gráfica.</li>
-                <li>El modelo de enseñanza fomenta la participación en proyectos reales de Diseño y Comunicación Visual enfocados en problemáticas comunitarias.</li>
+                <li>
+                    El taller Carlos Olachea es un espacio referente en artes impresas y grabado dentro de la facultad,
+                    donde se organizan encuentros internacionales y proyectos de edición gráfica.
+                </li>
+                <li>
+                    El modelo de enseñanza fomenta la participación en proyectos reales de Diseño y Comunicación Visual
+                    enfocados en problemáticas comunitarias.
+                </li>
             </ul>
 
             <hr />
@@ -478,9 +588,19 @@
                     <dt>¡Gracias por tu scroll!</dt>
                     <dd>
                         <em>Datos:</em>
-                        <a href="https://www.topuniversities.com/university-subject-rankings/art-design" target="_blank" rel="noopener">QS World University Rankings for Art and Design</a>
+                        <a
+                            href="https://www.topuniversities.com/university-subject-rankings/art-design"
+                            target="_blank"
+                            rel="noopener"
+                            >QS World University Rankings for Art and Design</a
+                        >
                         y
-                        <a href="https://www.topuniversities.com/world-university-rankings" target="_blank" rel="noopener">QS World University Rankings</a>
+                        <a
+                            href="https://www.topuniversities.com/world-university-rankings"
+                            target="_blank"
+                            rel="noopener"
+                            >QS World University Rankings</a
+                        >
                         consultados en noviembre de 2026.
                     </dd>
                     <dd>
@@ -491,16 +611,17 @@
                     </dd>
                     <dd>
                         <em>Contexto:</em> Proyecto desarrollado como ejercicio final para la asignatura
-                        <a href="https://github.com/profesorfaco/troncal" target="_blank" rel="noopener">Diseño y Visualización de Información</a>,
-                        a cargo del Profesor Felipe Cortez.
+                        <a href="https://github.com/profesorfaco/troncal" target="_blank" rel="noopener"
+                            >Diseño y Visualización de Información</a
+                        >, a cargo del Profesor Felipe Cortez.
                     </dd>
                     <dd>
                         <em>Uso de IA:</em> En este trabajo de Diseño y Visualización de Información se utilizaron
-                        herramientas de inteligencia artificial generativa. Claude. Estas fueron
-                        empleadas en limpieza y resolución de códigos. [Si aplica: los prompts utilizados y la metodología
-                        de integración se describen en la sección correspondiente.] Todo el contenido fue revisado y
-                        validado por <a href="#" rel="me">Catalina Aceituno</a> y <a href="#" rel="me">Amalia Pontigo</a>,
-                        quienes asumimos plena responsabilidad sobre el trabajo presentado.
+                        herramientas de inteligencia artificial generativa. Claude. Estas fueron empleadas en limpieza y
+                        resolución de códigos. [Si aplica: los prompts utilizados y la metodología de integración se
+                        describen en la sección correspondiente.] Todo el contenido fue revisado y validado por
+                        <a href="#" rel="me">Catalina Aceituno</a> y <a href="#" rel="me">Amalia Pontigo</a>, quienes
+                        asumimos plena responsabilidad sobre el trabajo presentado.
                     </dd>
                     <dd>
                         <em>Recomendación:</em> Revisa otros destinos de intercambio, tales como:
@@ -532,7 +653,8 @@
                     const max = Math.max(origen, destino);
                     const celdas = Array.from({ length: total }, (_, i) => {
                         const n = i + 1;
-                        const clase = n === destino ? "destino" : n === origen ? "origen" : n > min && n < max ? "entre" : "";
+                        const clase =
+                            n === destino ? "destino" : n === origen ? "origen" : n > min && n < max ? "entre" : "";
                         return `<span class="${clase}">${n}</span>`;
                     });
                     document.getElementById(id).innerHTML = celdas.join("");
@@ -567,21 +689,167 @@
                         "Sostenibilidad",
                     ],
                     [
-                        { label: "Origen: U. de Chile", data: [92, 85.1, 9.9, 16, 10.6, 8.2, 76.8, 95.7, 66.4], ...azul },
+                        {
+                            label: "Origen: U. de Chile",
+                            data: [92, 85.1, 9.9, 16, 10.6, 8.2, 76.8, 95.7, 66.4],
+                            ...azul,
+                        },
                         { label: "Destino: UNAM", data: [99.3, 91.8, 38.1, 4.2, 11, 3.1, 95.2, 94.2, 80.4], ...rojo },
                     ]
                 );
 
-                // Radar 2: QS Art & Design 2026 (solo hay dos puntajes publicados; los ejes son las instituciones)
-                radar(
-                    "comparaEscuelas",
-                    ["U. de Chile", "UNAM", "Politécnico de Milán", "Tec de Monterrey", "UBA", "USP"],
-                    [
-                        { label: "Reputación académica", data: [52.5, 63.9, 82.8, 64.7, 60.4, 58.8], ...azul },
-                        { label: "Reputación entre empleadores", data: [78.5, 81.6, 87.4, 82.7, 83.0, 73.2], ...rojo },
+                // Radar 2: SVG interactivo (QS Arte y Diseño 2026)
+                const radarSVG = (raiz, { ejes, max, paso, radio, series }) => {
+                    const NS = "http://www.w3.org/2000/svg";
+                    const svg = raiz.querySelector("svg");
+                    const area = raiz.querySelector(".area");
+                    const leyenda = raiz.querySelector(".leyenda");
+                    const info = raiz.querySelector(".info");
+
+                    const crear = (tag, attrs = {}, padre) => {
+                        const nodo = document.createElementNS(NS, tag);
+                        Object.entries(attrs).forEach(([k, v]) => nodo.setAttribute(k, v));
+                        if (padre) padre.append(nodo);
+                        return nodo;
+                    };
+                    const fmt = (n) => n.toLocaleString("es-CL", { minimumFractionDigits: 1 });
+                    const angulo = (i) => ((-90 + i * 120) * Math.PI) / 180; // 3 ejes: arriba, abajo-derecha, abajo-izquierda
+                    const punto = (i, r) => [r * Math.cos(angulo(i)), r * Math.sin(angulo(i))];
+                    const aRadio = (valor) => (valor / max) * radio;
+                    const coords = (puntos) => puntos.map((p) => p.map((n) => n.toFixed(1)).join(",")).join(" ");
+
+                    // Grilla, ejes y escala
+                    for (let v = paso; v <= max; v += paso) {
+                        crear(
+                            "polygon",
+                            { class: "grilla", points: coords(ejes.map((_, i) => punto(i, aRadio(v)))) },
+                            area
+                        );
+                    }
+                    ejes.forEach((nombre, i) => {
+                        const [x, y] = punto(i, radio);
+                        crear("line", { class: "eje", x1: 0, y1: 0, x2: x, y2: y }, area);
+                        const [tx, ty] = punto(i, radio + 12);
+                        crear(
+                            "text",
+                            { x: tx, y: i === 0 ? ty - 2 : ty + 5, "text-anchor": ["middle", "start", "end"][i] },
+                            area
+                        ).textContent = nombre;
+                    });
+                    for (let v = paso; v <= max; v += paso) {
+                        crear("text", { class: "escala", x: 0, y: -aRadio(v), dy: "0.35em" }, area).textContent = v;
+                    }
+
+                    // Interacción
+                    const resaltar = (id) => {
+                        raiz.classList.toggle("hay-activa", Boolean(id));
+                        raiz.querySelectorAll(".serie").forEach((s) =>
+                            s.classList.toggle("activa", s.dataset.serie === id)
+                        );
+                    };
+
+                    const mostrarInfo = (evento, s, i) => {
+                        const lineas = [ejes[i], `${s.corto}: ${fmt(s.valores[i])} puntos`];
+                        if (s.lugares?.[i]) lineas.push(`Lugar mundial: ${s.lugares[i]}`);
+
+                        const texto = info.querySelector("text");
+                        texto.textContent = "";
+                        lineas.forEach((linea, n) => {
+                            const t = crear("tspan", { x: 10, dy: n === 0 ? 18 : "1.35em" }, texto);
+                            if (n === 0) t.setAttribute("font-weight", "bold");
+                            t.textContent = linea;
+                        });
+                        info.setAttribute("visibility", "visible");
+
+                        const caja = texto.getBBox();
+                        const rect = info.querySelector("rect");
+                        rect.setAttribute("width", caja.width + 20);
+                        rect.setAttribute("height", caja.height + 14);
+
+                        const p = svg.createSVGPoint();
+                        p.x = evento.clientX;
+                        p.y = evento.clientY;
+                        const { x, y } = p.matrixTransform(svg.getScreenCTM().inverse());
+                        const px = Math.min(Math.max(x - (caja.width + 20) / 2, 4), 720 - caja.width - 24);
+                        info.setAttribute("transform", `translate(${px}, ${Math.max(y - caja.height - 30, 4)})`);
+                    };
+                    const ocultarInfo = () => info.setAttribute("visibility", "hidden");
+
+                    // Series y leyenda
+                    series.forEach((s) => {
+                        const color = `rgb(${s.rgb})`;
+                        const relleno = `rgba(${s.rgb}, 0.2)`;
+                        const grupo = crear("g", { class: "serie", "data-serie": s.id }, area);
+                        const puntos = s.valores.map((v, i) => punto(i, aRadio(v)));
+
+                        crear("polygon", { points: coords(puntos), stroke: color, fill: relleno }, grupo);
+
+                        puntos.forEach(([x, y], i) => {
+                            const posicion = { cx: x.toFixed(1), cy: y.toFixed(1) };
+                            crear("circle", { class: "punto", ...posicion, r: 3, fill: relleno, stroke: color }, grupo);
+                            const zona = crear(
+                                "circle",
+                                {
+                                    class: "zona",
+                                    ...posicion,
+                                    r: 12,
+                                    tabindex: 0,
+                                    "aria-label": `${s.nombre}, ${ejes[i]}: ${fmt(s.valores[i])}`,
+                                },
+                                grupo
+                            );
+                            const entrar = (e) => (resaltar(s.id), mostrarInfo(e, s, i));
+                            const salir = () => (resaltar(null), ocultarInfo());
+                            zona.addEventListener("pointerenter", entrar);
+                            zona.addEventListener("pointermove", (e) => mostrarInfo(e, s, i));
+                            zona.addEventListener("pointerleave", salir);
+                            zona.addEventListener("focus", () => {
+                                const c = zona.getBoundingClientRect();
+                                entrar({ clientX: c.left + c.width / 2, clientY: c.top + c.height / 2 });
+                            });
+                            zona.addEventListener("blur", salir);
+                        });
+
+                        const boton = document.createElement("button");
+                        boton.type = "button";
+                        boton.setAttribute("aria-pressed", "true");
+                        boton.innerHTML = `<span class="muestra" style="--color: ${color}; --relleno: ${relleno}"></span>${s.nombre}`;
+                        boton.addEventListener("pointerenter", () => resaltar(s.id));
+                        boton.addEventListener("pointerleave", () => resaltar(null));
+                        boton.addEventListener("focus", () => resaltar(s.id));
+                        boton.addEventListener("blur", () => resaltar(null));
+                        boton.addEventListener("click", () => {
+                            const oculta = grupo.classList.toggle("oculta");
+                            boton.setAttribute("aria-pressed", String(!oculta));
+                        });
+                        leyenda.append(boton);
+                    });
+                };
+
+                radarSVG(document.getElementById("radarEscuelas"), {
+                    ejes: ["Reputación académica", "Reputación empleadores", "Puntaje general"],
+                    max: 100,
+                    paso: 20,
+                    radio: 150,
+                    series: [
+                        {
+                            id: "uchile",
+                            nombre: "Origen: U. de Chile",
+                            corto: "U. de Chile",
+                            rgb: "54, 162, 235",
+                            valores: [52.5, 78.5, 55.1],
+                            lugares: [null, null, "151–200"],
+                        },
+                        {
+                            id: "unam",
+                            nombre: "Destino: UNAM",
+                            corto: "UNAM",
+                            rgb: "255, 99, 132",
+                            valores: [63.9, 81.6, 65.7],
+                            lugares: [null, null, "54"],
+                        },
                     ],
-                    40
-                );
+                });
 
                 // Mapa
                 const map = L.map("map").setView([19.332, -99.188], 3);
